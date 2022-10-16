@@ -54,7 +54,7 @@ def create_manifest_json(parent_directory, header_uuid, modules_uuid, version):
     with open(f"{parent_directory}Content/skin_pack/manifest.json", "x") as manifest_file:
         manifest_file.write(json.dumps(manifest_json, indent=2))
         
-def create_skins_json(parent_directory, skins):
+def create_skins_json(parent_directory, localization_name, skins):
     skins_list = []
     for skin in skins:
         skins_list.append({
@@ -65,24 +65,24 @@ def create_skins_json(parent_directory, skins):
         })
     skins_json = {
         "skins": skins_list,
-        "serialize_name": "Pop",
-        "localization_name": "Pop"
+        "serialize_name": localization_name,
+        "localization_name": localization_name
     }
     with open(f"{parent_directory}Content/skin_pack/skins.json", "x") as skin_file:
         skin_file.write(json.dumps(skins_json, indent=2))
 
-def create_en_us_lang(pack_name, parent_directory, skins):
+def create_en_us_lang(pack_name, localization_name, parent_directory, skins):
     with open(f"{parent_directory}Content/skin_pack/texts/en_US.lang", "x") as us_lang_file:
-        us_lang_file.write(f"skinpack.Pop={pack_name}")
+        us_lang_file.write(f"skinpack.{localization_name}={pack_name}")
         for skin in skins:
-            us_lang_file.write(f"\nskinpack.Pop.{skin}={skin}")
+            us_lang_file.write(f"\nskinpack.{localization_name}.{skin}={skin}")
 
 def create_languages_json(parent_directory):
     languages_json = ["en_US"]
     with open(f"{parent_directory}Content/skin_pack/texts/languages.json", "x") as languages_file:
         languages_file.write(json.dumps(languages_json, indent=2))
         
-def create_files(pack_name, skins):
+def create_files(pack_name, localization_name, skins):
     # Intialization
     parent_directory = f"./{pack_name.replace(' ', '_')}/"
 
@@ -105,8 +105,8 @@ def create_files(pack_name, skins):
     
     # Create text files individually
     create_manifest_json(parent_directory, header_uuid, modules_uuid, version)
-    create_skins_json(parent_directory, skins)
-    create_en_us_lang(pack_name, parent_directory, skins)
+    create_skins_json(parent_directory, localization_name, skins)
+    create_en_us_lang(pack_name, localization_name, parent_directory, skins)
     create_languages_json(parent_directory)
     
 def create_skinpack():
@@ -114,18 +114,20 @@ def create_skinpack():
     print("Initializing a new skinpack...\n")
     
     pack_name = input("Enter skin pack name: ").strip()
+    print("")
+    localization_name = input("Enter localization name: ").strip()
     skins = add_skins(pack_name)
 
-    create_files(pack_name, skins)
+    create_files(pack_name, localization_name, skins)
     
     return pack_name
 
 # Begin prompt
 user_choice = ""
+os.system("CLS")
+print("Packer™ for Monkey Slap Nut\n")
+print("Type 'new' to package a new skinpack.\nType 'quit' to exit.\n")
 while (True):
-    os.system("CLS")
-    print("Packer™ for Monkey Slap Nut\n")
-    print("Type 'new' to package a new skinpack.\nType 'quit' to exit.\n")
     user_choice = input(">>> ").strip()
     match user_choice:
         case "new":
@@ -133,8 +135,10 @@ while (True):
             os.system("CLS")
             print(f"Successfully created [{new_pack_name}]!")
             time.sleep(2)
+            os.system("CLS")
+            print("Packer™ for Monkey Slap Nut\n")
+            print("Type 'new' to package a new skinpack.\nType 'quit' to exit.\n")
         case "quit":
             break
         case _:
             print("\nUnrecognized input, enter 'new' or 'quit'.\n")
-
