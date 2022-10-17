@@ -84,7 +84,8 @@ def create_languages_json(parent_directory):
         
 def create_files(pack_name, localization_name, skins):
     # Intialization
-    parent_directory = f"./{pack_name.replace(' ', '_')}/"
+    pack_name_formatted = pack_name.replace(' ', '_')
+    parent_directory = f"./{pack_name_formatted}/"
 
     header_uuid = str(uuid.uuid4())
     modules_uuid = str(uuid.uuid4())
@@ -102,6 +103,9 @@ def create_files(pack_name, localization_name, skins):
     # Create all directories
     for dir in directories:
         os.mkdir(dir)
+    
+    # Copy partner art to Marketing Art directory
+    os.system(f"copy ContentName_PartnerArt.jpg {pack_name_formatted}\\\"Marketing Art\"\\ContentName_PartnerArt.jpg")
     
     # Create text files individually
     create_manifest_json(parent_directory, header_uuid, modules_uuid, version)
@@ -131,13 +135,19 @@ while (True):
     user_choice = input(">>> ").strip()
     match user_choice:
         case "new":
-            new_pack_name = create_skinpack()
-            os.system("CLS")
-            print(f"Successfully created [{new_pack_name}]!")
-            time.sleep(2)
-            os.system("CLS")
-            print("Packer™ for Monkey Slap Nut\n")
-            print("Type 'new' to package a new skinpack.\nType 'quit' to exit.\n")
+            try:
+                new_pack_name = create_skinpack()
+                os.system("CLS")
+                print(f"Successfully created [{new_pack_name}]!")
+                time.sleep(2)
+            except:
+                os.system("CLS")
+                print(f"Something went wrong while creating [{new_pack_name}]!\nCheck if a skinpack already exists with this name.")
+                time.sleep(4)
+            finally:
+                os.system("CLS")
+                print("Packer™ for Monkey Slap Nut\n")
+                print("Type 'new' to package a new skinpack.\nType 'quit' to exit.\n")
         case "quit":
             break
         case _:
