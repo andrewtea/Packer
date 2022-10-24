@@ -75,7 +75,7 @@ def create_en_us_lang(pack_name, localization_name, parent_directory, skins):
     with open(f"{parent_directory}Content/skin_pack/texts/en_US.lang", "x") as us_lang_file:
         us_lang_file.write(f"skinpack.{localization_name}={pack_name}")
         for skin in skins:
-            us_lang_file.write(f"\nskinpack.{localization_name}.{skin}={skin}")
+            us_lang_file.write(f"\nskin.{localization_name}.{skin}={skin}")
 
 def create_languages_json(parent_directory):
     languages_json = ["en_US"]
