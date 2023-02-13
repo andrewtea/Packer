@@ -2,6 +2,7 @@ import os
 import json
 import uuid
 import time
+from PIL import Image
 
 def add_skins(name):
     os.system("CLS")
@@ -82,7 +83,7 @@ def create_languages_json(parent_directory):
     with open(f"{parent_directory}Content/skin_pack/texts/languages.json", "x") as languages_file:
         languages_file.write(json.dumps(languages_json, indent=2))
         
-def create_files(pack_name, localization_name, skins):
+def create_files(pack_name, localization_name, skins, pack_art):
     # Intialization
     pack_name_formatted = pack_name.replace(' ', '_')
     parent_directory = f"./{pack_name_formatted}/"
@@ -107,6 +108,13 @@ def create_files(pack_name, localization_name, skins):
     # Copy partner art to Marketing Art directory
     os.system(f"copy ContentName_PartnerArt.jpg {pack_name_formatted}\\\"Marketing Art\"\\ContentName_PartnerArt.jpg")
     
+    # Copy two version of key art to respective directories
+    os.system(f"copy {pack_art} {pack_name_formatted}\\\"Marketing Art\"\\ContentName_MarketingKeyArt.jpg")
+    original_image = Image.open(pack_art)
+    resized_image = original_image.resize((800, 450))
+    resized_image.save("ContentName_Thumbnail_0.jpg")
+    os.system(f"move \"ContentName_Thumbnail_0.jpg\" {pack_name_formatted}\\\"Store Art\"")
+    
     # Create text files individually
     create_manifest_json(parent_directory, header_uuid, modules_uuid, version)
     create_skins_json(parent_directory, localization_name, skins)
@@ -120,9 +128,11 @@ def create_skinpack():
     pack_name = input("Enter skin pack name: ").strip()
     print("")
     localization_name = input("Enter localization name: ").strip()
+    print("")
+    pack_art = input("Enter path to key art: ").strip()
     skins = add_skins(pack_name)
 
-    create_files(pack_name, localization_name, skins)
+    create_files(pack_name, localization_name, skins, pack_art)
     
     return pack_name
 
