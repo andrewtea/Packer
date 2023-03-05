@@ -85,8 +85,7 @@ def create_languages_json(parent_directory):
         
 def create_files(pack_name, localization_name, skins, pack_art):
     # Intialization
-    pack_name_formatted = pack_name.replace(' ', '_')
-    parent_directory = f"{pack_name_formatted}"
+    parent_directory = pack_name.replace(' ', '_')
 
     header_uuid = str(uuid.uuid4())
     modules_uuid = str(uuid.uuid4())
