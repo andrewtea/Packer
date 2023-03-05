@@ -105,10 +105,10 @@ def create_files(pack_name, localization_name, skins, pack_art):
     for dir in directories:
         os.mkdir(dir)
     
-    # Copy partner art to Marketing Art directory
+    # Copy the partner art to Marketing Art directory
     os.system(f"copy ContentName_PartnerArt.jpg \"{parent_directory}\"\\\"Marketing Art\"\\ContentName_PartnerArt.jpg")
     
-    # Copy two versions of key art to respective directories
+    # Copy two versions of the key art to respective directories
     os.system(f"copy {pack_art} \"{parent_directory}\"\\\"Marketing Art\"\\ContentName_MarketingKeyArt.jpg")
     original_image = Image.open(pack_art)
     resized_image = original_image.resize((800, 450))
