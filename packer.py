@@ -52,7 +52,7 @@ def create_manifest_json(parent_directory, header_uuid, modules_uuid, version):
         ],
         "format_version": 1
     }
-    with open(f"{parent_directory}Content/skin_pack/manifest.json", "x") as manifest_file:
+    with open(f"{parent_directory}/Content/skin_pack/manifest.json", "x") as manifest_file:
         manifest_file.write(json.dumps(manifest_json, indent=2))
         
 def create_skins_json(parent_directory, localization_name, skins):
@@ -69,24 +69,24 @@ def create_skins_json(parent_directory, localization_name, skins):
         "serialize_name": localization_name,
         "localization_name": localization_name
     }
-    with open(f"{parent_directory}Content/skin_pack/skins.json", "x") as skin_file:
+    with open(f"{parent_directory}/Content/skin_pack/skins.json", "x") as skin_file:
         skin_file.write(json.dumps(skins_json, indent=2))
 
 def create_en_us_lang(pack_name, localization_name, parent_directory, skins):
-    with open(f"{parent_directory}Content/skin_pack/texts/en_US.lang", "x") as us_lang_file:
+    with open(f"{parent_directory}/Content/skin_pack/texts/en_US.lang", "x") as us_lang_file:
         us_lang_file.write(f"skinpack.{localization_name}={pack_name}")
         for skin in skins:
             us_lang_file.write(f"\nskin.{localization_name}.{skin}={skin}")
 
 def create_languages_json(parent_directory):
     languages_json = ["en_US"]
-    with open(f"{parent_directory}Content/skin_pack/texts/languages.json", "x") as languages_file:
+    with open(f"{parent_directory}/Content/skin_pack/texts/languages.json", "x") as languages_file:
         languages_file.write(json.dumps(languages_json, indent=2))
         
 def create_files(pack_name, localization_name, skins, pack_art):
     # Intialization
     pack_name_formatted = pack_name.replace(' ', '_')
-    parent_directory = f"./{pack_name_formatted}/"
+    parent_directory = f"{pack_name_formatted}"
 
     header_uuid = str(uuid.uuid4())
     modules_uuid = str(uuid.uuid4())
@@ -94,11 +94,11 @@ def create_files(pack_name, localization_name, skins, pack_art):
 
     directories = [
         parent_directory,
-        f"{parent_directory}Content/",
-        f"{parent_directory}Content/skin_pack/",
-        f"{parent_directory}Content/skin_pack/texts/",
-        f"{parent_directory}Marketing Art/",
-        f"{parent_directory}Store Art/",
+        f"{parent_directory}/Content/",
+        f"{parent_directory}/Content/skin_pack/",
+        f"{parent_directory}/Content/skin_pack/texts/",
+        f"{parent_directory}/Marketing Art/",
+        f"{parent_directory}/Store Art/",
     ]
     
     # Create all directories
@@ -106,14 +106,14 @@ def create_files(pack_name, localization_name, skins, pack_art):
         os.mkdir(dir)
     
     # Copy partner art to Marketing Art directory
-    os.system(f"copy ContentName_PartnerArt.jpg {pack_name_formatted}\\\"Marketing Art\"\\ContentName_PartnerArt.jpg")
+    os.system(f"copy ContentName_PartnerArt.jpg \"{parent_directory}\"\\\"Marketing Art\"\\ContentName_PartnerArt.jpg")
     
-    # Copy two version of key art to respective directories
-    os.system(f"copy {pack_art} {pack_name_formatted}\\\"Marketing Art\"\\ContentName_MarketingKeyArt.jpg")
+    # Copy two versions of key art to respective directories
+    os.system(f"copy {pack_art} \"{parent_directory}\"\\\"Marketing Art\"\\ContentName_MarketingKeyArt.jpg")
     original_image = Image.open(pack_art)
     resized_image = original_image.resize((800, 450))
     resized_image.save("ContentName_Thumbnail_0.jpg")
-    os.system(f"move \"ContentName_Thumbnail_0.jpg\" {pack_name_formatted}\\\"Store Art\"")
+    os.system(f"move \"ContentName_Thumbnail_0.jpg\" \"{parent_directory}\"\\\"Store Art\"")
     
     # Create text files individually
     create_manifest_json(parent_directory, header_uuid, modules_uuid, version)
